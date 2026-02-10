@@ -161,10 +161,40 @@
             .today-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .today-metric { padding: 12px 8px; }
             .today-value { font-size: 20px; }
-            .chart-section { padding: 15px; }
+            .chart-section { padding: 15px; width: 100%; }
             .section-title { font-size: 14px; }
             .hr-metric-value { font-size: 20px; }
-            canvas { max-height: 250px !important; }
+            canvas { 
+                max-height: 250px !important;
+                width: 100% !important;
+            }
+        }
+
+        /* Landscape mode - full width charts */
+        @media (max-width: 900px) and (orientation: landscape) {
+            body { padding: 10px; }
+            .container { max-width: 100%; }
+            .today-section { padding: 10px; }
+            .today-grid { grid-template-columns: repeat(6, 1fr); gap: 8px; }
+            .today-metric { padding: 8px 5px; }
+            .today-value { font-size: 16px; }
+            .today-label { font-size: 9px; }
+            .chart-section { 
+                padding: 10px; 
+                width: 100%;
+                max-width: 100%;
+            }
+            .section-title { font-size: 12px; }
+            .hr-detail { padding: 10px; }
+            .hr-metric-value { font-size: 18px; }
+            canvas { 
+                max-height: 300px !important;
+                height: 300px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            .header { padding: 10px; margin-bottom: 10px; }
+            .readiness { font-size: 32px; padding: 8px 20px; }
         }
 
         @media (max-width: 400px) {
@@ -307,6 +337,9 @@
         Chart.defaults.color = 'rgba(255,255,255,0.7)';
         Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
 
+        // Detect landscape mode
+        const isLandscape = window.innerWidth > window.innerHeight && window.innerWidth < 900;
+
         const healthData = {
             readiness: 75,
             sleepScore: 85,
@@ -364,7 +397,7 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
                 interaction: {
                     intersect: false,
                     mode: 'index'
@@ -429,7 +462,7 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
                     y: { beginAtZero: false, min: 40, max: 60, grid: { color: 'rgba(255,255,255,0.05)' } },
