@@ -312,33 +312,8 @@
             intensityValues: [22, 65, 17, 81, 48, 1, 0]
         };
 
-        const today = new Date();
-        document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-        document.getElementById('updateTime').textContent = healthData.updateTime;
-        document.getElementById('readiness').textContent = healthData.readiness;
-
-        document.getElementById('todaySleepScore').textContent = healthData.sleepScore;
-        document.getElementById('todaySleepDuration').textContent = healthData.sleepDuration.toFixed(1);
-        document.getElementById('todayDeepSleep').textContent = healthData.deepSleep.toFixed(1);
-        document.getElementById('todayRemSleep').textContent = healthData.remSleep.toFixed(1);
-        document.getElementById('todayHrv').textContent = healthData.hrv;
-        document.getElementById('todayRestingHR').textContent = healthData.restingHR;
-        document.getElementById('todayBattery').textContent = healthData.bodyBattery;
-        document.getElementById('todayStress').textContent = healthData.stress;
-        document.getElementById('todaySteps').textContent = healthData.steps.toLocaleString();
-        document.getElementById('todayDistance').textContent = healthData.distance.toFixed(1);
-        document.getElementById('todayIntensity').textContent = healthData.intensity;
-        document.getElementById('todaySpo2').textContent = healthData.spo2;
-
-        document.getElementById('todayResting').textContent = healthData.restingHR;
-        document.getElementById('todayAvgHR').textContent = healthData.avgHR;
-        document.getElementById('todayMaxHR').textContent = healthData.maxHR;
-        document.getElementById('todayMinHR').textContent = healthData.minHR;
+        // Note: Today's metrics are hardcoded in HTML above
+        // The charts below use the healthData arrays
 
         // Real Garmin heart rate data chart
         const hrCtx = document.getElementById('todayHeartRateChart').getContext('2d');
