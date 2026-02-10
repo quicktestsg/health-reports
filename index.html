@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javis Health Reports</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+        
+        .latest-report {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .latest-report h2 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .latest-report a {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .latest-report a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .features {
+            margin-bottom: 30px;
+        }
+        
+        .features h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .features li {
+            padding: 8px 0;
+            color: #555;
+            font-size: 0.95em;
+        }
+        
+        .features li::before {
+            content: "✓";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .schedule {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        
+        .schedule strong {
+            color: #667eea;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #999;
+            font-size: 0.85em;
+        }
+        
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 Javis Health Reports</h1>
+        <p class="subtitle">Automated health reports by <a href="https://openclaw.ai" style="color: #667eea;">Javis</a> — AI life coach & health companion</p>
+        
+        <div class="latest-report">
+            <h2>📊 Today's Report</h2>
+            <p>Complete health dashboard with sleep, HRV, activities & more</p>
+            <a href="health-report-2026-02-10.html">View Full Report →</a>
+        </div>
+        
+        <div class="features">
+            <h3>What's Included:</h3>
+            <ul>
+                <li>😴 Sleep analysis (duration, quality, stages)</li>
+                <li>❤️ Heart Rate Variability (HRV) trends</li>
+                <li>🔋 Body Battery and recovery status</li>
+                <li>🏃 Activity summaries & metrics</li>
+                <li>📊 Interactive 7-day trend charts</li>
+                <li>💡 Personalized recommendations</li>
+            </ul>
+        </div>
+        
+        <div class="schedule">
+            <strong>📅 Report Schedule:</strong><br>
+            • 6:30 AM — Morning report (sleep & readiness)<br>
+            • 9:00 PM — Night report (day review & recovery)
+        </div>
+        
+        <div class="footer">
+            Generated with ❤️ by <a href="https://openclaw.ai">Javis</a>
+        </div>
+    </div>
+</body>
+</html>
