@@ -203,6 +203,97 @@
             .today-value { font-size: 18px; }
             .header h1 { font-size: 20px; }
         }
+
+        /* Fullscreen button */
+        .fullscreen-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(102, 126, 234, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .fullscreen-btn:hover {
+            background: rgba(102, 126, 234, 1);
+            transform: scale(1.05);
+        }
+        .chart-section { position: relative; }
+
+        /* Fullscreen mode */
+        .chart-section:fullscreen {
+            padding: 20px;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .chart-section:fullscreen .chart-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .chart-section:fullscreen canvas {
+            max-height: 70vh !important;
+            width: 100% !important;
+        }
+        .chart-section:fullscreen .fullscreen-btn {
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+        .chart-section:-webkit-full-screen {
+            padding: 20px;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .chart-section:-webkit-full-screen .chart-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .chart-section:-webkit-full-screen canvas {
+            max-height: 70vh !important;
+            width: 100% !important;
+        }
+        .chart-section:-webkit-full-screen .fullscreen-btn {
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        /* Exit hint */
+        .exit-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+        .chart-section:fullscreen .exit-hint,
+        .chart-section:-webkit-full-screen .exit-hint {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -281,7 +372,8 @@
             </div>
         </div>
 
-        <div class="chart-section">
+        <div class="chart-section" id="todayHrSection">
+            <button class="fullscreen-btn" onclick="toggleFullscreen('todayHrSection')">🔍 Fullscreen</button>
             <div class="chart-title">
                 💓 Today's Heart Rate
                 <span class="real-data-badge">✓ REAL DATA (207 samples)</span>
@@ -306,29 +398,40 @@
                 </div>
             </div>
             <canvas id="todayHeartRateChart" height="120"></canvas>
+            <div class="exit-hint">Press Esc or tap button to exit</div>
         </div>
 
-        <div class="chart-section">
+        <div class="chart-section" id="hrTrendSection">
+            <button class="fullscreen-btn" onclick="toggleFullscreen('hrTrendSection')">🔍 Fullscreen</button>
             <div class="chart-title">💓 Heart Rate Trend (7 days)</div>
             <canvas id="heartRateChart" height="120"></canvas>
+            <div class="exit-hint">Press Esc or tap button to exit</div>
         </div>
 
         <div class="charts-grid">
-            <div class="chart-section">
+            <div class="chart-section" id="sleepSection">
+                <button class="fullscreen-btn" onclick="toggleFullscreen('sleepSection')">🔍 Fullscreen</button>
                 <div class="chart-title">😴 Sleep Score (7 days)</div>
                 <canvas id="sleepChart" height="150"></canvas>
+                <div class="exit-hint">Press Esc or tap button to exit</div>
             </div>
-            <div class="chart-section">
+            <div class="chart-section" id="hrvSection">
+                <button class="fullscreen-btn" onclick="toggleFullscreen('hrvSection')">🔍 Fullscreen</button>
                 <div class="chart-title">❤️ HRV Trend (7 days)</div>
                 <canvas id="hrvChart" height="150"></canvas>
+                <div class="exit-hint">Press Esc or tap button to exit</div>
             </div>
-            <div class="chart-section">
+            <div class="chart-section" id="stepsSection">
+                <button class="fullscreen-btn" onclick="toggleFullscreen('stepsSection')">🔍 Fullscreen</button>
                 <div class="chart-title">👟 Steps (7 days)</div>
                 <canvas id="stepsChart" height="150"></canvas>
+                <div class="exit-hint">Press Esc or tap button to exit</div>
             </div>
-            <div class="chart-section">
+            <div class="chart-section" id="intensitySection">
+                <button class="fullscreen-btn" onclick="toggleFullscreen('intensitySection')">🔍 Fullscreen</button>
                 <div class="chart-title">💪 Intensity Minutes (7 days)</div>
                 <canvas id="intensityChart" height="150"></canvas>
+                <div class="exit-hint">Press Esc or tap button to exit</div>
             </div>
         </div>
     </div>
@@ -336,6 +439,81 @@
     <script>
         Chart.defaults.color = 'rgba(255,255,255,0.7)';
         Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+
+        // Fullscreen toggle function
+        async function toggleFullscreen(sectionId) {
+            const element = document.getElementById(sectionId);
+
+            // Check if currently in fullscreen
+            const isFullscreen = document.fullscreenElement ||
+                                document.webkitFullscreenElement ||
+                                document.mozFullScreenElement ||
+                                document.msFullscreenElement;
+
+            if (isFullscreen) {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    await document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    await document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    await document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    await document.msExitFullscreen();
+                }
+
+                // Reset orientation if possible
+                if (screen.orientation && screen.orientation.unlock) {
+                    try {
+                        await screen.orientation.unlock();
+                    } catch (e) {
+                        console.log('Orientation unlock not supported');
+                    }
+                }
+            } else {
+                // Enter fullscreen for this specific chart
+                if (element.requestFullscreen) {
+                    await element.requestFullscreen();
+                } else if (element.webkitRequestFullscreen) {
+                    await element.webkitRequestFullscreen();
+                } else if (element.mozRequestFullScreen) {
+                    await element.mozRequestFullScreen();
+                } else if (element.msRequestFullscreen) {
+                    await element.msRequestFullscreen();
+                }
+
+                // Try to rotate to landscape
+                if (screen.orientation && screen.orientation.lock) {
+                    try {
+                        await screen.orientation.lock('landscape');
+                    } catch (e) {
+                        console.log('Orientation lock not supported or denied');
+                    }
+                }
+            }
+        }
+
+        // Listen for fullscreen changes to update button text
+        document.addEventListener('fullscreenchange', updateFullscreenButtons);
+        document.addEventListener('webkitfullscreenchange', updateFullscreenButtons);
+        document.addEventListener('mozfullscreenchange', updateFullscreenButtons);
+        document.addEventListener('MSFullscreenChange', updateFullscreenButtons);
+
+        function updateFullscreenButtons() {
+            const isFullscreen = document.fullscreenElement ||
+                                document.webkitFullscreenElement ||
+                                document.mozFullScreenElement ||
+                                document.msFullscreenElement;
+
+            const buttons = document.querySelectorAll('.fullscreen-btn');
+            buttons.forEach(btn => {
+                if (isFullscreen) {
+                    btn.textContent = '✕ Exit';
+                } else {
+                    btn.textContent = '🔍 Fullscreen';
+                }
+            });
+        }
 
         // Detect landscape mode
         const isLandscape = window.innerWidth > window.innerHeight && window.innerWidth < 900;
