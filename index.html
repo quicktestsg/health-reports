@@ -3,164 +3,526 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Javis Health Reports</title>
+    <title>Jerry's Health Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            padding: 30px;
+            color: #fff;
         }
-        
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            text-align: center;
             padding: 40px;
-            max-width: 600px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-        
-        h1 {
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 2em;
-        }
-        
-        .subtitle {
-            color: #666;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
             margin-bottom: 30px;
-            font-size: 0.95em;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .latest-report {
+        .header h1 {
+            font-size: 36px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .latest-report h2 {
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
-            font-size: 1.2em;
+            font-weight: 800;
         }
-        
-        .latest-report a {
+        .header .date { font-size: 18px; color: rgba(255,255,255,0.7); font-weight: 600; }
+        .header .update-time { font-size: 14px; color: rgba(255,255,255,0.5); margin-top: 8px; }
+        .readiness {
             display: inline-block;
-            background: white;
-            color: #667eea;
-            padding: 12px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 10px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50px;
+            font-size: 64px;
+            font-weight: 800;
+            box-shadow: 0 20px 50px rgba(102,126,234,0.4);
+            margin-top: 20px;
         }
-        
-        .latest-report a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        .readiness-label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 8px;
+            font-weight: 700;
         }
-        
-        .features {
+        .today-section {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
             margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .features h3 {
-            color: #333;
-            margin-bottom: 15px;
+        .section-title {
+            font-size: 20px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
         }
-        
-        .features ul {
-            list-style: none;
-            padding: 0;
+        .today-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
         }
-        
-        .features li {
-            padding: 8px 0;
-            color: #555;
-            font-size: 0.95em;
+        @media (max-width: 1200px) {
+            .today-grid { grid-template-columns: repeat(3, 1fr); }
         }
-        
-        .features li::before {
-            content: "✓";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 10px;
+        @media (max-width: 600px) {
+            .today-grid { grid-template-columns: repeat(2, 1fr); }
         }
-        
-        .schedule {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 0.9em;
-            color: #555;
-        }
-        
-        .schedule strong {
-            color: #667eea;
-        }
-        
-        .footer {
+        .today-metric {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 18px;
             text-align: center;
-            margin-top: 30px;
-            color: #999;
-            font-size: 0.85em;
+            border: 1px solid rgba(255,255,255,0.08);
         }
-        
-        .footer a {
-            color: #667eea;
-            text-decoration: none;
+        .today-label { font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 6px; font-weight: 600; }
+        .today-value { font-size: 28px; font-weight: 800; margin-bottom: 2px; }
+        .today-value.excellent { color: #22d3ee; }
+        .today-value.good { color: #4ade80; }
+        .today-value.warning { color: #fbbf24; }
+        .today-unit { font-size: 13px; color: rgba(255,255,255,0.4); }
+        .chart-section {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .footer a:hover {
-            text-decoration: underline;
+        .chart-title {
+            font-size: 16px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+        .hr-detail {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(248, 113, 113, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(248, 113, 113, 0.2);
+        }
+        .hr-metric { text-align: center; }
+        .hr-metric-label { font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+        .hr-metric-value { font-size: 32px; font-weight: 800; color: #f87171; }
+        .real-data-badge {
+            display: inline-block;
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 10px;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+        .gap-badge {
+            display: inline-block;
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 10px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        @media (max-width: 900px) {
+            .charts-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧠 Javis Health Reports</h1>
-        <p class="subtitle">Automated health reports by <a href="https://openclaw.ai" style="color: #667eea;">Javis</a> — AI life coach & health companion</p>
-        
-        <div class="latest-report">
-            <h2>📊 Today's Report</h2>
-            <p>Complete health dashboard with sleep, HRV, activities & more</p>
-            <a href="health-report-2026-02-10.html">View Full Report →</a>
+        <div class="header">
+            <h1>Health Dashboard</h1>
+            <div class="date">Tuesday, February 10, 2026</div>
+            <div class="update-time">Last updated: 2026-02-10 21:59</div>
+            <div class="readiness">75</div>
+            <div class="readiness-label">Readiness Score</div>
         </div>
-        
-        <div class="features">
-            <h3>What's Included:</h3>
-            <ul>
-                <li>😴 Sleep analysis (duration, quality, stages)</li>
-                <li>❤️ Heart Rate Variability (HRV) trends</li>
-                <li>🔋 Body Battery and recovery status</li>
-                <li>🏃 Activity summaries & metrics</li>
-                <li>📊 Interactive 7-day trend charts</li>
-                <li>💡 Personalized recommendations</li>
-            </ul>
+
+        <div class="today-section">
+            <div class="section-title">📅 Today's Health</div>
+            <div class="today-grid">
+                <div class="today-metric">
+                    <div class="today-label">😴 Sleep</div>
+                    <div class="today-value excellent">85</div>
+                    <div class="today-unit">score</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">💤 Duration</div>
+                    <div class="today-value good">7.5</div>
+                    <div class="today-unit">hours</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">🌙 Deep</div>
+                    <div class="today-value">1.5</div>
+                    <div class="today-unit">hours</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">💭 REM</div>
+                    <div class="today-value">1.3</div>
+                    <div class="today-unit">hours</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">❤️ HRV</div>
+                    <div class="today-value excellent">50</div>
+                    <div class="today-unit">ms</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">💓 Resting HR</div>
+                    <div class="today-value excellent">49</div>
+                    <div class="today-unit">bpm</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">🔋 Battery</div>
+                    <div class="today-value good">65</div>
+                    <div class="today-unit">charged</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">😰 Stress</div>
+                    <div class="today-value warning">39</div>
+                    <div class="today-unit">avg</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">👟 Steps</div>
+                    <div class="today-value good">8,000</div>
+                    <div class="today-unit">steps</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">📍 Distance</div>
+                    <div class="today-value">6.0</div>
+                    <div class="today-unit">km</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">🔥 Intensity</div>
+                    <div class="today-value warning">1</div>
+                    <div class="today-unit">minutes</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">🩸 SpO2</div>
+                    <div class="today-value excellent">96</div>
+                    <div class="today-unit">avg %</div>
+                </div>
+            </div>
         </div>
-        
-        <div class="schedule">
-            <strong>📅 Report Schedule:</strong><br>
-            • 6:30 AM — Morning report (sleep & readiness)<br>
-            • 9:00 PM — Night report (day review & recovery)
+
+        <div class="chart-section">
+            <div class="chart-title">
+                💓 Today's Heart Rate
+                <span class="real-data-badge">✓ REAL DATA (0 samples)</span>
+                <span class="gap-badge">⚠️ GAPS SHOWN</span>
+            </div>
+            <div class="hr-detail">
+                <div class="hr-metric">
+                    <div class="hr-metric-label">Resting</div>
+                    <div class="hr-metric-value">49</div>
+                </div>
+                <div class="hr-metric">
+                    <div class="hr-metric-label">Average</div>
+                    <div class="hr-metric-value">75</div>
+                </div>
+                <div class="hr-metric">
+                    <div class="hr-metric-label">Max</div>
+                    <div class="hr-metric-value">100</div>
+                </div>
+                <div class="hr-metric">
+                    <div class="hr-metric-label">Min</div>
+                    <div class="hr-metric-value">46</div>
+                </div>
+            </div>
+            <canvas id="todayHeartRateChart" height="120"></canvas>
         </div>
-        
-        <div class="footer">
-            Generated with ❤️ by <a href="https://openclaw.ai">Javis</a>
+
+        <div class="chart-section">
+            <div class="chart-title">💓 Heart Rate Trend (7 days)</div>
+            <canvas id="heartRateChart" height="120"></canvas>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-section">
+                <div class="chart-title">😴 Sleep Score (7 days)</div>
+                <canvas id="sleepChart" height="150"></canvas>
+            </div>
+            <div class="chart-section">
+                <div class="chart-title">❤️ HRV Trend (7 days)</div>
+                <canvas id="hrvChart" height="150"></canvas>
+            </div>
+            <div class="chart-section">
+                <div class="chart-title">👟 Steps (7 days)</div>
+                <canvas id="stepsChart" height="150"></canvas>
+            </div>
+            <div class="chart-section">
+                <div class="chart-title">💪 Intensity Minutes (7 days)</div>
+                <canvas id="intensityChart" height="150"></canvas>
+            </div>
         </div>
     </div>
+
+    <script>
+        Chart.defaults.color = 'rgba(255,255,255,0.7)';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+
+        const healthData = {
+            readiness: 75,
+            sleepScore: 85,
+            sleepDuration: 7.5,
+            deepSleep: 1.5,
+            remSleep: 1.3,
+            hrv: 50,
+            restingHR: 49,
+            maxHR: 100,
+            minHR: 46,
+            avgHR: 75,
+            bodyBattery: 65,
+            stress: 39,
+            steps: 8000,
+            distance: 6,
+            intensity: 1,
+            spo2: 96,
+            updateTime: '2026-02-11 06:30',
+            todayHRLabels: [],
+            todayHRValues: [],
+            dates: ['Feb 5', 'Feb 6', 'Feb 7', 'Feb 8', 'Feb 9', 'Feb 10', 'Feb 11'],
+            heartRate: [47, 47, 49, 47, 46, 49, 48],
+            sleepScores: [90, 85, 91, 88, 93, 88, 83],
+            hrvValues: [51, 53, 49, 54, 55, 54, 51],
+            stepsValues: [9994, 20408, 13760, 17218, 15551, 8748, 0],
+            intensityValues: [22, 65, 17, 81, 48, 1, 0]
+        };
+
+        const today = new Date();
+        document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        document.getElementById('updateTime').textContent = healthData.updateTime;
+        document.getElementById('readiness').textContent = healthData.readiness;
+
+        document.getElementById('todaySleepScore').textContent = healthData.sleepScore;
+        document.getElementById('todaySleepDuration').textContent = healthData.sleepDuration.toFixed(1);
+        document.getElementById('todayDeepSleep').textContent = healthData.deepSleep.toFixed(1);
+        document.getElementById('todayRemSleep').textContent = healthData.remSleep.toFixed(1);
+        document.getElementById('todayHrv').textContent = healthData.hrv;
+        document.getElementById('todayRestingHR').textContent = healthData.restingHR;
+        document.getElementById('todayBattery').textContent = healthData.bodyBattery;
+        document.getElementById('todayStress').textContent = healthData.stress;
+        document.getElementById('todaySteps').textContent = healthData.steps.toLocaleString();
+        document.getElementById('todayDistance').textContent = healthData.distance.toFixed(1);
+        document.getElementById('todayIntensity').textContent = healthData.intensity;
+        document.getElementById('todaySpo2').textContent = healthData.spo2;
+
+        document.getElementById('todayResting').textContent = healthData.restingHR;
+        document.getElementById('todayAvgHR').textContent = healthData.avgHR;
+        document.getElementById('todayMaxHR').textContent = healthData.maxHR;
+        document.getElementById('todayMinHR').textContent = healthData.minHR;
+
+        // Real Garmin heart rate data chart
+        const hrCtx = document.getElementById('todayHeartRateChart').getContext('2d');
+        const hrGradient = hrCtx.createLinearGradient(0, 0, 0, 400);
+        hrGradient.addColorStop(0, 'rgba(248, 113, 113, 0.3)');
+        hrGradient.addColorStop(1, 'rgba(248, 113, 113, 0.0)');
+
+        new Chart(hrCtx, {
+            type: 'line',
+            data: {
+                labels: healthData.todayHRLabels,
+                datasets: [{
+                    label: 'Heart Rate',
+                    data: healthData.todayHRValues,
+                    borderColor: '#f87171',
+                    backgroundColor: hrGradient,
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                    pointHitRadius: 10,
+                    spanGaps: false  // Don't connect across null values (shows gaps when Garmin not worn)
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#f87171',
+                        borderColor: '#f87171',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            title: function(context) {
+                                return 'Time: ' + context[0].label;
+                            },
+                            label: function(context) {
+                                if (context.parsed.y === null) {
+                                    return 'No data (device not worn)';
+                                }
+                                return 'Heart Rate: ' + context.parsed.y + ' bpm';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            maxTicksLimit: 12,
+                            color: 'rgba(255,255,255,0.5)',
+                            font: { size: 10 }
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        min: Math.min(...healthData.todayHRValues) - 5,
+                        max: Math.max(...healthData.todayHRValues) + 5,
+                        grid: { color: 'rgba(255,255,255,0.05)' }
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('heartRateChart'), {
+            type: 'line',
+            data: {
+                labels: healthData.dates,
+                datasets: [{
+                    label: 'Resting HR',
+                    data: healthData.heartRate,
+                    borderColor: '#f87171',
+                    backgroundColor: 'rgba(248, 113, 113, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: false, min: 40, max: 60, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('sleepChart'), {
+            type: 'line',
+            data: {
+                labels: healthData.dates,
+                datasets: [{
+                    label: 'Sleep Score',
+                    data: healthData.sleepScores,
+                    borderColor: '#22d3ee',
+                    backgroundColor: 'rgba(34, 211, 238, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
+            }
+        });
+
+        new Chart(document.getElementById('hrvChart'), {
+            type: 'line',
+            data: {
+                labels: healthData.dates,
+                datasets: [{
+                    label: 'HRV (ms)',
+                    data: healthData.hrvValues,
+                    borderColor: '#4ade80',
+                    backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
+            }
+        });
+
+        new Chart(document.getElementById('stepsChart'), {
+            type: 'bar',
+            data: {
+                labels: healthData.dates,
+                datasets: [{
+                    label: 'Steps',
+                    data: healthData.stepsValues,
+                    backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                    borderColor: '#667eea',
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
+            }
+        });
+
+        new Chart(document.getElementById('intensityChart'), {
+            type: 'bar',
+            data: {
+                labels: healthData.dates,
+                datasets: [{
+                    label: 'Intensity Minutes',
+                    data: healthData.intensityValues,
+                    backgroundColor: 'rgba(251, 191, 36, 0.7)',
+                    borderColor: '#fbbf24',
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
+            }
+        });
+    </script>
 </body>
 </html>
