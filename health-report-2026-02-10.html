@@ -3,199 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Report - 2026-02-09</title>
+    <title>Health Report - 2026-02-10</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
             min-height: 100vh;
-            padding: 15px;
+            padding: 20px;
             color: #fff;
-            line-height: 1.6;
         }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
+        .container { max-width: 1200px; margin: 0 auto; }
         .header {
             text-align: center;
-            padding: 30px 20px;
+            padding: 40px 30px;
             background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            margin-bottom: 20px;
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            margin-bottom: 24px;
             border: 1px solid rgba(255,255,255,0.1);
         }
-
         .header h1 {
-            font-size: clamp(24px, 5vw, 32px);
+            font-size: clamp(28px, 5vw, 42px);
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: 800;
         }
-
-        .header .date {
-            font-size: 14px;
-            color: rgba(255,255,255,0.7);
-        }
-
+        .header .date { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 20px; }
         .readiness-score {
             display: inline-block;
-            margin-top: 15px;
-            padding: 15px 30px;
+            padding: 20px 40px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50px;
-            font-size: 48px;
-            font-weight: 700;
-            box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+            border-radius: 60px;
+            font-size: clamp(48px, 8vw, 64px);
+            font-weight: 800;
+            box-shadow: 0 15px 40px rgba(102,126,234,0.4);
+            animation: pulse 2s ease-in-out infinite;
         }
-
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
         .readiness-label {
             display: block;
-            font-size: 12px;
+            font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 5px;
+            letter-spacing: 3px;
+            margin-top: 8px;
+            font-weight: 600;
         }
-
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
         }
-
         .card {
             background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 20px;
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 24px;
             border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease forwards;
+            opacity: 0;
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-        }
-
-        .card-title {
-            font-size: 14px;
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .metric-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .metric-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .metric-label {
-            font-size: 14px;
-            color: rgba(255,255,255,0.8);
-        }
-
-        .metric-value {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .metric-value.excellent { color: #10B981; }
-        .metric-value.good { color: #3B82F6; }
-        .metric-value.fair { color: #F59E0B; }
-        .metric-value.poor { color: #EF4444; }
-
-        .chart-card {
-            grid-column: 1 / -1;
-        }
-
-        .chart-container {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 12px;
-        }
-
-        .activities-list {
-            list-style: none;
-        }
-
-        .activity-item {
-            padding: 12px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .activity-name {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .activity-details {
-            font-size: 12px;
-            color: rgba(255,255,255,0.6);
-        }
-
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: rgba(255,255,255,0.5);
-            font-size: 12px;
-        }
-
-        @media (max-width: 600px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .readiness-score {
-                font-size: 36px;
-                padding: 12px 24px;
-            }
-
-            .header h1 {
-                font-size: 24px;
-            }
-        }
-
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        .card {
-            animation: fadeIn 0.5s ease forwards;
-        }
-
+        .card:hover { transform: translateY(-8px); }
         .card:nth-child(1) { animation-delay: 0.1s; }
         .card:nth-child(2) { animation-delay: 0.2s; }
         .card:nth-child(3) { animation-delay: 0.3s; }
-        .card:nth-child(4) { animation-delay: 0.4s; }
-        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card-title {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .metric-row:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .metric-label { font-size: 15px; color: rgba(255,255,255,0.8); font-weight: 500; }
+        .metric-value { font-size: 22px; font-weight: 700; }
+        .metric-value.excellent { color: #10B981; }
+        .metric-value.good { color: #3B82F6; }
+        .metric-value.fair { color: #F59E0B; }
+        .chart-card { grid-column: 1 / -1; }
+        .chart-container { height: 300px; margin-top: 16px; padding: 16px; background: rgba(0,0,0,0.2); border-radius: 16px; }
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+        .activity-name { font-weight: 600; font-size: 14px; }
+        .activity-details { font-size: 12px; color: rgba(255,255,255,0.6); text-align: right; }
+        .footer { text-align: center; padding: 30px; color: rgba(255,255,255,0.5); font-size: 13px; }
+        .footer a { color: #667eea; text-decoration: none; font-weight: 600; }
+        .metric-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-excellent { background: rgba(16, 185, 129, 0.2); color: #10B981; }
+        .badge-good { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .readiness-score { font-size: 42px; padding: 16px 32px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌙 Good Evening, Jerry</h1>
+            <h1>🌅 Good Morning, Jerry</h1>
             <div class="date">Tuesday, 10 February 2026</div>
             <div class="readiness-score">81
                 <span class="readiness-label">Readiness Score</span>
@@ -205,7 +145,7 @@
         <div class="grid">
             <!-- Sleep Card -->
             <div class="card">
-                <div class="card-title">😴 Sleep Analysis</div>
+                <div class="card-title">😴 Sleep Quality</div>
                 <div class="metric-row">
                     <span class="metric-label">Duration</span>
                     <span class="metric-value good">7.8h</span>
@@ -222,45 +162,99 @@
                     <span class="metric-label">REM Sleep</span>
                     <span class="metric-value">2.0h</span>
                 </div>
+                <div class="metric-row">
+                    <span class="metric-label">Avg Respiration</span>
+                    <span class="metric-value">13 bpm</span>
+                </div>
             </div>
 
             <!-- Recovery Card -->
             <div class="card">
-                <div class="card-title">❤️ Recovery</div>
+                <div class="card-title">❤️ Recovery Status</div>
                 <div class="metric-row">
                     <span class="metric-label">HRV</span>
-                    <span class="metric-value excellent">55ms</span>
+                    <div>
+                        <span class="metric-value excellent">55ms</span>
+                        <span class="metric-badge badge-excellent">BALANCED</span>
+                    </div>
                 </div>
                 <div class="metric-row">
-                    <span class="metric-label">Body Battery</span>
+                    <span class="metric-label">Resting HR</span>
+                    <span class="metric-value excellent">49 bpm</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Max HR</span>
+                    <span class="metric-value">79 bpm</span>
+                </div>
+            </div>
+
+            <!-- Body Battery Card -->
+            <div class="card">
+                <div class="card-title">🔋 Body Battery</div>
+                <div class="metric-row">
+                    <span class="metric-label">Charged</span>
                     <span class="metric-value good">65%</span>
                 </div>
                 <div class="metric-row">
                     <span class="metric-label">Drained</span>
-                    <span class="metric-value">4%</span>
+                    <span class="metric-value">7%</span>
                 </div>
                 <div class="metric-row">
-                    <span class="metric-label">Stress (Avg)</span>
-                    <span class="metric-value excellent">14</span>
+                    <span class="metric-label">Peak</span>
+                    <span class="metric-value excellent">80%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Lowest</span>
+                    <span class="metric-value">17%</span>
                 </div>
             </div>
 
-            <!-- Activity Card -->
+            <!-- Activities Card -->
             <div class="card">
-                <div class="card-title">🏃 Activity</div>
-                <div class="metric-row">
-                    <span class="metric-label">Workouts Today</span>
-                    <span class="metric-value">4</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Calories Burned</span>
-                    <span class="metric-value">360</span>
+                <div class="card-title">🏃 Recent Activities</div>
+                
+                <div class="activity-item">
+                    <div class="activity-name">Treadmill Running</div>
+                    <div class="activity-details">
+                        12 min
+                        • 110 cal
+                        • 2.00 km
+                    </div>
                 </div>
                 
-                <div style="margin-top:15px">
-                    <div class="activity-item">
-                        <span class="activity-name">Relax and Focus (Short)</span>
-                        <span class="activity-details">2 min • 0 cal</span>
+                <div class="activity-item">
+                    <div class="activity-name">Relax and Focus (Short)</div>
+                    <div class="activity-details">
+                        6 min
+                        
+                        
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-name">Strength</div>
+                    <div class="activity-details">
+                        90 min
+                        • 335 cal
+                        
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-name">Boxing</div>
+                    <div class="activity-details">
+                        22 min
+                        • 159 cal
+                        
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-name">Singapore Hiking</div>
+                    <div class="activity-details">
+                        17 min
+                        • 58 cal
+                        • 1.06 km
                     </div>
                 </div>
                 
@@ -270,43 +264,7 @@
             <div class="card chart-card">
                 <div class="card-title">📈 Sleep Trend (7 Days)</div>
                 <div class="chart-container">
-                    
-    <svg viewBox="0 0 800 250" style="width:100%;height:auto;">
-      <defs>
-        <linearGradient id="grad-8B5CF6" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:0.5" />
-          <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:0" />
-        </linearGradient>
-      </defs>
-      
-      <line x1="50" y1="50" x2="750" y2="50" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="54" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">112</text>
-    
-      <line x1="50" y1="87.5" x2="750" y2="87.5" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="91.5" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">84</text>
-    
-      <line x1="50" y1="125" x2="750" y2="125" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="129" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">56</text>
-    
-      <line x1="50" y1="162.5" x2="750" y2="162.5" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="166.5" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">28</text>
-    
-      <line x1="50" y1="200" x2="750" y2="200" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="204" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">0</text>
-    
-      <polygon points="50,200 50,79.03225806451611 166.66666666666669,79.03225806451611 283.33333333333337,85.75268817204301 400,77.68817204301074 516.6666666666667,81.72043010752688 633.3333333333334,75 750,81.72043010752688 750,200" fill="url(#grad-8B5CF6)" />
-      <polyline points="50,79.03225806451611 166.66666666666669,79.03225806451611 283.33333333333337,85.75268817204301 400,77.68817204301074 516.6666666666667,81.72043010752688 633.3333333333334,75 750,81.72043010752688" fill="none" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="50" cy="79.03225806451611" r="5" fill="#8B5CF6" stroke="white" stroke-width="2"/>
-                <text x="50" y="67.03225806451611" text-anchor="middle" fill="white" font-size="12" font-weight="bold">90</text><circle cx="166.66666666666669" cy="79.03225806451611" r="5" fill="#8B5CF6" stroke="white" stroke-width="2"/>
-                <text x="166.66666666666669" y="67.03225806451611" text-anchor="middle" fill="white" font-size="12" font-weight="bold">90</text><circle cx="283.33333333333337" cy="85.75268817204301" r="5" fill="#8B5CF6" stroke="white" stroke-width="2"/>
-                <text x="283.33333333333337" y="73.75268817204301" text-anchor="middle" fill="white" font-size="12" font-weight="bold">85</text><circle cx="400" cy="77.68817204301074" r="5" fill="#8B5CF6" stroke="white" stroke-width="2"/>
-                <text x="400" y="65.68817204301074" text-anchor="middle" fill="white" font-size="12" font-weight="bold">91</text><circle cx="516.6666666666667" cy="81.72043010752688" r="5" fill="#8B5CF6" stroke="white" stroke-width="2"/>
-                <text x="516.6666666666667" y="69.72043010752688" text-anchor="middle" fill="white" font-size="12" font-weight="bold">88</text><circle cx="633.3333333333334" cy="75" r="5" fill="#8B5CF6" stroke="white" stroke-width="2"/>
-                <text x="633.3333333333334" y="63" text-anchor="middle" fill="white" font-size="12" font-weight="bold">93</text><circle cx="750" cy="81.72043010752688" r="5" fill="#8B5CF6" stroke="white" stroke-width="2"/>
-                <text x="750" y="69.72043010752688" text-anchor="middle" fill="white" font-size="12" font-weight="bold">88</text>
-      <text x="50" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Wed</text><text x="166.66666666666669" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Thu</text><text x="283.33333333333337" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Fri</text><text x="400" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Sat</text><text x="516.6666666666667" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Sun</text><text x="633.3333333333334" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Mon</text><text x="750" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Tue</text>
-    </svg>
-  
+                    <canvas id="sleepChart"></canvas>
                 </div>
             </div>
 
@@ -314,43 +272,7 @@
             <div class="card chart-card">
                 <div class="card-title">💓 HRV Trend (7 Days)</div>
                 <div class="chart-container">
-                    
-    <svg viewBox="0 0 800 250" style="width:100%;height:auto;">
-      <defs>
-        <linearGradient id="grad-10B981" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#10B981;stop-opacity:0.5" />
-          <stop offset="100%" style="stop-color:#10B981;stop-opacity:0" />
-        </linearGradient>
-      </defs>
-      
-      <line x1="50" y1="50" x2="750" y2="50" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="54" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">66</text>
-    
-      <line x1="50" y1="87.5" x2="750" y2="87.5" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="91.5" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">50</text>
-    
-      <line x1="50" y1="125" x2="750" y2="125" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="129" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">33</text>
-    
-      <line x1="50" y1="162.5" x2="750" y2="162.5" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="166.5" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">17</text>
-    
-      <line x1="50" y1="200" x2="750" y2="200" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="204" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">0</text>
-    
-      <polygon points="50,200 50,88.63636363636364 166.66666666666669,84.0909090909091 283.33333333333337,79.54545454545455 400,88.63636363636364 516.6666666666667,77.27272727272727 633.3333333333334,75 750,77.27272727272727 750,200" fill="url(#grad-10B981)" />
-      <polyline points="50,88.63636363636364 166.66666666666669,84.0909090909091 283.33333333333337,79.54545454545455 400,88.63636363636364 516.6666666666667,77.27272727272727 633.3333333333334,75 750,77.27272727272727" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="50" cy="88.63636363636364" r="5" fill="#10B981" stroke="white" stroke-width="2"/>
-                <text x="50" y="76.63636363636364" text-anchor="middle" fill="white" font-size="12" font-weight="bold">49</text><circle cx="166.66666666666669" cy="84.0909090909091" r="5" fill="#10B981" stroke="white" stroke-width="2"/>
-                <text x="166.66666666666669" y="72.0909090909091" text-anchor="middle" fill="white" font-size="12" font-weight="bold">51</text><circle cx="283.33333333333337" cy="79.54545454545455" r="5" fill="#10B981" stroke="white" stroke-width="2"/>
-                <text x="283.33333333333337" y="67.54545454545455" text-anchor="middle" fill="white" font-size="12" font-weight="bold">53</text><circle cx="400" cy="88.63636363636364" r="5" fill="#10B981" stroke="white" stroke-width="2"/>
-                <text x="400" y="76.63636363636364" text-anchor="middle" fill="white" font-size="12" font-weight="bold">49</text><circle cx="516.6666666666667" cy="77.27272727272727" r="5" fill="#10B981" stroke="white" stroke-width="2"/>
-                <text x="516.6666666666667" y="65.27272727272727" text-anchor="middle" fill="white" font-size="12" font-weight="bold">54</text><circle cx="633.3333333333334" cy="75" r="5" fill="#10B981" stroke="white" stroke-width="2"/>
-                <text x="633.3333333333334" y="63" text-anchor="middle" fill="white" font-size="12" font-weight="bold">55</text><circle cx="750" cy="77.27272727272727" r="5" fill="#10B981" stroke="white" stroke-width="2"/>
-                <text x="750" y="65.27272727272727" text-anchor="middle" fill="white" font-size="12" font-weight="bold">54</text>
-      <text x="50" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Wed</text><text x="166.66666666666669" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Thu</text><text x="283.33333333333337" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Fri</text><text x="400" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Sat</text><text x="516.6666666666667" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Sun</text><text x="633.3333333333334" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Mon</text><text x="750" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Tue</text>
-    </svg>
-  
+                    <canvas id="hrvChart"></canvas>
                 </div>
             </div>
 
@@ -358,94 +280,124 @@
             <div class="card chart-card">
                 <div class="card-title">🔋 Body Battery (7 Days)</div>
                 <div class="chart-container">
-                    
-    <svg viewBox="0 0 800 250" style="width:100%;height:auto;">
-      <defs>
-        <linearGradient id="grad-F59E0B" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:0.5" />
-          <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:0" />
-        </linearGradient>
-      </defs>
-      
-      <line x1="50" y1="50" x2="750" y2="50" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="54" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">96</text>
-    
-      <line x1="50" y1="87.5" x2="750" y2="87.5" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="91.5" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">72</text>
-    
-      <line x1="50" y1="125" x2="750" y2="125" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="129" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">48</text>
-    
-      <line x1="50" y1="162.5" x2="750" y2="162.5" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="166.5" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">24</text>
-    
-      <line x1="50" y1="200" x2="750" y2="200" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="204" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">0</text>
-    
-      <polygon points="50,200 50,81.25 166.66666666666669,78.125 283.33333333333337,81.25 400,75 516.6666666666667,95.3125 633.3333333333334,78.125 750,98.4375 750,200" fill="url(#grad-F59E0B)" />
-      <polyline points="50,81.25 166.66666666666669,78.125 283.33333333333337,81.25 400,75 516.6666666666667,95.3125 633.3333333333334,78.125 750,98.4375" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="50" cy="81.25" r="5" fill="#F59E0B" stroke="white" stroke-width="2"/>
-                <text x="50" y="69.25" text-anchor="middle" fill="white" font-size="12" font-weight="bold">76</text><circle cx="166.66666666666669" cy="78.125" r="5" fill="#F59E0B" stroke="white" stroke-width="2"/>
-                <text x="166.66666666666669" y="66.125" text-anchor="middle" fill="white" font-size="12" font-weight="bold">78</text><circle cx="283.33333333333337" cy="81.25" r="5" fill="#F59E0B" stroke="white" stroke-width="2"/>
-                <text x="283.33333333333337" y="69.25" text-anchor="middle" fill="white" font-size="12" font-weight="bold">76</text><circle cx="400" cy="75" r="5" fill="#F59E0B" stroke="white" stroke-width="2"/>
-                <text x="400" y="63" text-anchor="middle" fill="white" font-size="12" font-weight="bold">80</text><circle cx="516.6666666666667" cy="95.3125" r="5" fill="#F59E0B" stroke="white" stroke-width="2"/>
-                <text x="516.6666666666667" y="83.3125" text-anchor="middle" fill="white" font-size="12" font-weight="bold">67</text><circle cx="633.3333333333334" cy="78.125" r="5" fill="#F59E0B" stroke="white" stroke-width="2"/>
-                <text x="633.3333333333334" y="66.125" text-anchor="middle" fill="white" font-size="12" font-weight="bold">78</text><circle cx="750" cy="98.4375" r="5" fill="#F59E0B" stroke="white" stroke-width="2"/>
-                <text x="750" y="86.4375" text-anchor="middle" fill="white" font-size="12" font-weight="bold">65</text>
-      <text x="50" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Wed</text><text x="166.66666666666669" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Thu</text><text x="283.33333333333337" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Fri</text><text x="400" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Sat</text><text x="516.6666666666667" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Sun</text><text x="633.3333333333334" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Mon</text><text x="750" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Tue</text>
-    </svg>
-  
-                </div>
-            </div>
-
-            <!-- Stress Chart -->
-            <div class="card chart-card">
-                <div class="card-title">🧘 Stress Levels (7 Days)</div>
-                <div class="chart-container">
-                    
-    <svg viewBox="0 0 800 250" style="width:100%;height:auto;">
-      <defs>
-        <linearGradient id="grad-EF4444" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#EF4444;stop-opacity:0.5" />
-          <stop offset="100%" style="stop-color:#EF4444;stop-opacity:0" />
-        </linearGradient>
-      </defs>
-      
-      <line x1="50" y1="50" x2="750" y2="50" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="54" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">49</text>
-    
-      <line x1="50" y1="87.5" x2="750" y2="87.5" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="91.5" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">37</text>
-    
-      <line x1="50" y1="125" x2="750" y2="125" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="129" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">25</text>
-    
-      <line x1="50" y1="162.5" x2="750" y2="162.5" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="166.5" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">12</text>
-    
-      <line x1="50" y1="200" x2="750" y2="200" stroke="rgba(255,255,255,0.1)" stroke-dasharray="5,5"/>
-      <text x="40" y="204" text-anchor="end" fill="rgba(255,255,255,0.5)" font-size="11">0</text>
-    
-      <polygon points="50,200 50,75 166.66666666666669,84.14634146341461 283.33333333333337,90.24390243902438 400,108.53658536585364 516.6666666666667,99.39024390243902 633.3333333333334,75 750,157.3170731707317 750,200" fill="url(#grad-EF4444)" />
-      <polyline points="50,75 166.66666666666669,84.14634146341461 283.33333333333337,90.24390243902438 400,108.53658536585364 516.6666666666667,99.39024390243902 633.3333333333334,75 750,157.3170731707317" fill="none" stroke="#EF4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="50" cy="75" r="5" fill="#EF4444" stroke="white" stroke-width="2"/>
-                <text x="50" y="63" text-anchor="middle" fill="white" font-size="12" font-weight="bold">41</text><circle cx="166.66666666666669" cy="84.14634146341461" r="5" fill="#EF4444" stroke="white" stroke-width="2"/>
-                <text x="166.66666666666669" y="72.14634146341461" text-anchor="middle" fill="white" font-size="12" font-weight="bold">38</text><circle cx="283.33333333333337" cy="90.24390243902438" r="5" fill="#EF4444" stroke="white" stroke-width="2"/>
-                <text x="283.33333333333337" y="78.24390243902438" text-anchor="middle" fill="white" font-size="12" font-weight="bold">36</text><circle cx="400" cy="108.53658536585364" r="5" fill="#EF4444" stroke="white" stroke-width="2"/>
-                <text x="400" y="96.53658536585364" text-anchor="middle" fill="white" font-size="12" font-weight="bold">30</text><circle cx="516.6666666666667" cy="99.39024390243902" r="5" fill="#EF4444" stroke="white" stroke-width="2"/>
-                <text x="516.6666666666667" y="87.39024390243902" text-anchor="middle" fill="white" font-size="12" font-weight="bold">33</text><circle cx="633.3333333333334" cy="75" r="5" fill="#EF4444" stroke="white" stroke-width="2"/>
-                <text x="633.3333333333334" y="63" text-anchor="middle" fill="white" font-size="12" font-weight="bold">41</text><circle cx="750" cy="157.3170731707317" r="5" fill="#EF4444" stroke="white" stroke-width="2"/>
-                <text x="750" y="145.3170731707317" text-anchor="middle" fill="white" font-size="12" font-weight="bold">14</text>
-      <text x="50" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Wed</text><text x="166.66666666666669" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Thu</text><text x="283.33333333333337" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Fri</text><text x="400" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Sat</text><text x="516.6666666666667" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Sun</text><text x="633.3333333333334" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Mon</text><text x="750" y="235" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">Tue</text>
-    </svg>
-  
+                    <canvas id="batteryChart"></canvas>
                 </div>
             </div>
         </div>
 
         <div class="footer">
-            Generated by Javis • 2026-02-09T23:24:41.451Z • Data from Garmin Connect
+            Generated by Javis • 2026-02-10T00:20:36.202Z • Data from Garmin Connect<br>
+            <a href="https://github.com/quicktestsg/health-reports" target="_blank">View on GitHub</a> •
+            <a href="https://quicktestsg.github.io/health-reports/" target="_blank">All Reports</a>
         </div>
     </div>
+
+    <script>
+        Chart.defaults.color = 'rgba(255,255,255,0.7)';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+
+        function createGradient(ctx, color) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, color + '80');
+            gradient.addColorStop(1, color + '05');
+            return gradient;
+        }
+
+        // Sleep Chart
+        new Chart(document.getElementById('sleepChart'), {
+            type: 'line',
+            data: {
+                labels: ["Wed, 4 Feb","Thu, 5 Feb","Fri, 6 Feb","Sat, 7 Feb","Sun, 8 Feb","Mon, 9 Feb","Tue, 10 Feb"],
+                datasets: [{
+                    label: 'Sleep Score',
+                    data: [90,90,85,91,88,93,88],
+                    borderColor: '#8B5CF6',
+                    backgroundColor: function(context) {
+                        return createGradient(context.chart.ctx, '#8B5CF6');
+                    },
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#8B5CF6',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { grid: { display: false } }
+                },
+                animation: { duration: 1500, easing: 'easeInOutQuart' }
+            }
+        });
+
+        // HRV Chart
+        new Chart(document.getElementById('hrvChart'), {
+            type: 'line',
+            data: {
+                labels: ["Wed, 4 Feb","Thu, 5 Feb","Fri, 6 Feb","Sat, 7 Feb","Sun, 8 Feb","Mon, 9 Feb","Tue, 10 Feb"],
+                datasets: [{
+                    label: 'HRV (ms)',
+                    data: [49,51,53,49,54,55,54],
+                    borderColor: '#10B981',
+                    backgroundColor: function(context) {
+                        return createGradient(context.chart.ctx, '#10B981');
+                    },
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#10B981',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: false, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { grid: { display: false } }
+                },
+                animation: { duration: 1500, easing: 'easeInOutQuart' }
+            }
+        });
+
+        // Body Battery Chart
+        new Chart(document.getElementById('batteryChart'), {
+            type: 'line',
+            data: {
+                labels: ["Wed, 4 Feb","Thu, 5 Feb","Fri, 6 Feb","Sat, 7 Feb","Sun, 8 Feb","Mon, 9 Feb","Tue, 10 Feb"],
+                datasets: [{
+                    label: 'Body Battery %',
+                    data: [76,78,76,80,67,78,65],
+                    borderColor: '#F59E0B',
+                    backgroundColor: function(context) {
+                        return createGradient(context.chart.ctx, '#F59E0B');
+                    },
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#F59E0B',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { grid: { display: false } }
+                },
+                animation: { duration: 1500, easing: 'easeInOutQuart' }
+            }
+        });
+    </script>
 </body>
 </html>
