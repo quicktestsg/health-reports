@@ -1,0 +1,80 @@
+{
+  "activities": [
+    {
+      "date": "2026-02-11",
+      "activity_type": "hiking",
+      "activity_name": "Singapore Hiking",
+      "duration_seconds": 6460,
+      "distance_meters": 1295,
+      "calories": 297,
+      "avg_hr": 85,
+      "max_hr": 122,
+      "elevation_gain": 6
+    },
+    {
+      "date": "2026-02-11",
+      "activity_type": "strength_training",
+      "activity_name": "Strength",
+      "duration_seconds": 528,
+      "distance_meters": 0,
+      "calories": 43,
+      "avg_hr": 100,
+      "max_hr": 126
+    },
+    {
+      "date": "2026-02-10",
+      "activity_type": "hiking",
+      "activity_name": "Singapore Hiking",
+      "duration_seconds": 2329,
+      "distance_meters": 1187,
+      "calories": 110,
+      "avg_hr": 84,
+      "max_hr": 94,
+      "elevation_gain": 9
+    },
+    {
+      "date": "2026-02-09",
+      "activity_type": "running",
+      "activity_name": "Running",
+      "duration_seconds": 2173,
+      "distance_meters": 4661,
+      "calories": 321,
+      "avg_hr": 134,
+      "max_hr": 146
+    },
+    {
+      "date": "2026-02-09",
+      "activity_type": "strength_training",
+      "activity_name": "Strength",
+      "duration_seconds": 562,
+      "distance_meters": 0,
+      "calories": 39,
+      "avg_hr": 93,
+      "max_hr": 150
+    },
+    {
+      "date": "2026-02-08",
+      "activity_type": "hiking",
+      "activity_name": "Singapore Hiking",
+      "duration_seconds": 4909,
+      "distance_meters": 2284,
+      "calories": 227,
+      "avg_hr": 83,
+      "max_hr": 103,
+      "elevation_gain": 20
+    },
+    {
+      "date": "2026-02-08",
+      "activity_type": "badminton",
+      "activity_name": "Badminton",
+      "duration_seconds": 2763,
+      "distance_meters": 70,
+      "calories": 272,
+      "avg_hr": 116,
+      "max_hr": 174
+    }
+  ],
+  "start": "2026-02-08",
+  "end": "2026-02-11",
+  "count": 7
+}
