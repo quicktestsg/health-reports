@@ -235,54 +235,56 @@
         }
         .chart-section { position: relative; }
 
-        /* Fullscreen mode */
-        .chart-section:fullscreen {
-            padding: 20px;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        /* CSS Fullscreen mode (works on iOS Safari) */
+        .chart-section.chart-fullscreen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            padding: 20px !important;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%) !important;
+            z-index: 9999 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
         }
-        .chart-section:fullscreen .chart-title {
-            font-size: 18px;
-            margin-bottom: 20px;
+        .chart-section.chart-fullscreen .chart-title {
+            font-size: 18px !important;
+            margin-bottom: 20px !important;
+            text-align: center !important;
         }
-        .chart-section:fullscreen canvas {
+        .chart-section.chart-fullscreen canvas {
             max-height: 70vh !important;
             width: 100% !important;
+            max-width: 100% !important;
         }
-        .chart-section:fullscreen .fullscreen-btn {
-            top: 20px;
-            right: 20px;
-            padding: 10px 15px;
-            font-size: 14px;
+        .chart-section.chart-fullscreen .fullscreen-btn {
+            top: 20px !important;
+            right: 20px !important;
+            padding: 12px 18px !important;
+            font-size: 14px !important;
+            background: rgba(255, 59, 59, 0.9) !important;
         }
-        .chart-section:-webkit-full-screen {
-            padding: 20px;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        .chart-section.chart-fullscreen .hr-detail {
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            margin-bottom: 15px !important;
         }
-        .chart-section:-webkit-full-screen .chart-title {
-            font-size: 18px;
-            margin-bottom: 20px;
+        .chart-section.chart-fullscreen .exit-hint {
+            display: block !important;
         }
-        .chart-section:-webkit-full-screen canvas {
-            max-height: 70vh !important;
-            width: 100% !important;
+
+        /* Hide other elements when in fullscreen */
+        body.has-fullscreen > *:not(.chart-fullscreen) {
+            display: none !important;
         }
-        .chart-section:-webkit-full-screen .fullscreen-btn {
-            top: 20px;
-            right: 20px;
-            padding: 10px 15px;
-            font-size: 14px;
+        body.has-fullscreen {
+            overflow: hidden !important;
         }
 
         /* Exit hint */
@@ -299,9 +301,8 @@
             backdrop-filter: blur(10px);
             display: none;
         }
-        .chart-section:fullscreen .exit-hint,
-        .chart-section:-webkit-full-screen .exit-hint {
-            display: block;
+        .chart-section.chart-fullscreen .exit-hint {
+            display: block !important;
         }
     </style>
 </head>
@@ -449,82 +450,39 @@
         Chart.defaults.color = 'rgba(255,255,255,0.7)';
         Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
 
-        // Fullscreen toggle function
+        // Fullscreen toggle function (CSS-based for iOS Safari compatibility)
         function toggleFullscreen(sectionId) {
             const element = document.getElementById(sectionId);
-            console.log('Toggle fullscreen clicked:', sectionId);
+            const isFullscreen = element.classList.contains('chart-fullscreen');
 
-            // Check if currently in fullscreen
-            const isFullscreen = document.fullscreenElement ||
-                                document.webkitFullscreenElement ||
-                                document.mozFullScreenElement ||
-                                document.msFullscreenElement;
+            console.log('Toggle fullscreen:', sectionId, 'Current state:', isFullscreen);
 
-            console.log('Is fullscreen:', isFullscreen);
-
-            if (isFullscreen) {
-                // Exit fullscreen
-                console.log('Exiting fullscreen...');
-                if (document.exitFullscreen) {
-                    document.exitFullscreen().catch(err => console.log('Exit error:', err));
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen().catch(err => console.log('Exit error:', err));
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-            } else {
-                // Enter fullscreen for this specific chart
-                console.log('Entering fullscreen...');
-
-                // iOS Safari - use webkit prefix
-                if (element.webkitRequestFullscreen) {
-                    element.webkitRequestFullscreen().catch(err => {
-                        console.log('Fullscreen error:', err);
-                        alert('Fullscreen not supported on this device. Try rotating your phone manually!');
-                    });
-                } else if (element.requestFullscreen) {
-                    element.requestFullscreen().catch(err => {
-                        console.log('Fullscreen error:', err);
-                        alert('Fullscreen not supported. Try rotating your phone manually!');
-                    });
-                } else if (element.mozRequestFullScreen) {
-                    element.mozRequestFullScreen();
-                } else if (element.msRequestFullscreen) {
-                    element.msRequestFullscreen();
-                }
-
-                // Show hint to rotate manually if auto-rotate doesn't work
-                setTimeout(() => {
-                    const isInFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
-                    if (!isInFullscreen) {
-                        console.log('Auto-rotate not available, showing manual hint');
-                    }
-                }, 500);
-            }
-        }
-
-        // Listen for fullscreen changes to update button text
-        document.addEventListener('fullscreenchange', updateFullscreenButtons);
-        document.addEventListener('webkitfullscreenchange', updateFullscreenButtons);
-        document.addEventListener('mozfullscreenchange', updateFullscreenButtons);
-        document.addEventListener('MSFullscreenChange', updateFullscreenButtons);
-
-        function updateFullscreenButtons() {
-            const isFullscreen = document.fullscreenElement ||
-                                document.webkitFullscreenElement ||
-                                document.mozFullScreenElement ||
-                                document.msFullscreenElement;
-
-            const buttons = document.querySelectorAll('.fullscreen-btn');
-            buttons.forEach(btn => {
-                if (isFullscreen) {
-                    btn.textContent = '✕ Exit';
-                } else {
-                    btn.textContent = '🔍 Fullscreen';
-                }
+            // Remove fullscreen from all sections first
+            document.querySelectorAll('.chart-section').forEach(section => {
+                section.classList.remove('chart-fullscreen');
             });
+
+            if (!isFullscreen) {
+                // Enter fullscreen mode
+                element.classList.add('chart-fullscreen');
+                document.body.classList.add('has-fullscreen');
+                element.querySelector('.fullscreen-btn').textContent = '✕ Exit';
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+
+                console.log('Entered fullscreen mode');
+            } else {
+                // Exit fullscreen mode
+                document.body.classList.remove('has-fullscreen');
+
+                // Reset all buttons
+                document.querySelectorAll('.fullscreen-btn').forEach(btn => {
+                    btn.textContent = '🔍 Fullscreen';
+                });
+
+                console.log('Exited fullscreen mode');
+            }
         }
 
         // Detect landscape mode
