@@ -866,7 +866,7 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    y: { beginAtZero: false, min: 40, max: 60, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    y: { beginAtZero: false, min: 40, max: 130, grid: { color: 'rgba(255,255,255,0.05)' } },
                     x: { grid: { display: false } }
                 }
             }
@@ -912,7 +912,7 @@
             options: {
                 responsive: true,
                 plugins: { legend: { display: false } },
-                scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
+                scales: { y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
         });
 
@@ -932,7 +932,7 @@
             options: {
                 responsive: true,
                 plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
+                scales: { y: { min: 0, max: 25000, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
         });
 
@@ -952,7 +952,7 @@
             options: {
                 responsive: true,
                 plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
+                scales: { y: { min: 0, max: 120, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
         });
     </script>
