@@ -8,7 +8,6 @@
     <meta http-equiv="Expires" content="0">
     <title>Jerry's Health Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -331,12 +330,6 @@
             font-weight: 600;
             color: rgba(102, 126, 234, 1);
         }
-        .zoom-hint {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: rgba(74, 222, 128, 1);
-        }
     </style>
 </head>
 <body>
@@ -443,7 +436,7 @@
             <canvas id="todayHeartRateChart" height="120"></canvas>
             <div class="exit-hint">
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
-                <span class="zoom-hint">👆 Pinch chart to zoom • Drag to pan • Double-tap to reset</span>
+                
                 
                 Press Esc or tap button to exit
             </div>
@@ -455,7 +448,7 @@
             <canvas id="heartRateChart" height="120"></canvas>
             <div class="exit-hint">
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
-                <span class="zoom-hint">👆 Pinch chart to zoom • Drag to pan • Double-tap to reset</span>
+                
                 
                 Press Esc or tap button to exit
             </div>
@@ -468,7 +461,7 @@
                 <canvas id="sleepChart" height="150"></canvas>
                 <div class="exit-hint">
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
-                <span class="zoom-hint">👆 Pinch chart to zoom • Drag to pan • Double-tap to reset</span>
+                
                 
                 Press Esc or tap button to exit
             </div>
@@ -479,7 +472,7 @@
                 <canvas id="hrvChart" height="150"></canvas>
                 <div class="exit-hint">
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
-                <span class="zoom-hint">👆 Pinch chart to zoom • Drag to pan • Double-tap to reset</span>
+                
                 
                 Press Esc or tap button to exit
             </div>
@@ -490,7 +483,7 @@
                 <canvas id="stepsChart" height="150"></canvas>
                 <div class="exit-hint">
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
-                <span class="zoom-hint">👆 Pinch chart to zoom • Drag to pan • Double-tap to reset</span>
+                
                 
                 Press Esc or tap button to exit
             </div>
@@ -501,7 +494,7 @@
                 <canvas id="intensityChart" height="150"></canvas>
                 <div class="exit-hint">
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
-                <span class="zoom-hint">👆 Pinch chart to zoom • Drag to pan • Double-tap to reset</span>
+                
                 
                 Press Esc or tap button to exit
             </div>
@@ -510,32 +503,8 @@
     </div>
 
     <script>
-        // Register zoom plugin if available
-        if (typeof ChartJSZoom !== 'undefined') {
-            Chart.register(ChartJSZoom.default);
-        }
-
         Chart.defaults.color = 'rgba(255,255,255,0.7)';
         Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
-
-        // Prevent default touch behaviors on charts to enable chart-level zoom
-        document.addEventListener('DOMContentLoaded', function() {
-            const canvases = document.querySelectorAll('canvas');
-            canvases.forEach(canvas => {
-                // Prevent browser's default pinch-to-zoom
-                canvas.addEventListener('touchstart', function(e) {
-                    if (e.touches.length === 2) {
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-
-                canvas.addEventListener('touchmove', function(e) {
-                    if (e.touches.length === 2) {
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-            });
-        });
 
         // Fullscreen toggle function (CSS-based for iOS Safari compatibility)
         async function toggleFullscreen(sectionId) {
@@ -660,22 +629,6 @@
                 },
                 plugins: {
                     legend: { display: false },
-                    zoom: {
-                        zoom: {
-                            wheel: { enabled: false },
-                            pinch: { enabled: true },
-                            mode: 'xy',
-                        },
-                        pan: {
-                            enabled: true,
-                            mode: 'xy',
-                            modifierKey: null
-                        },
-                        limits: {
-                            x: { min: 'original', max: 'original' },
-                            y: { min: 'original', max: 'original' }
-                        }
-                    },
                     tooltip: {
                         backgroundColor: 'rgba(0, 0, 0, 0.8)',
                         titleColor: '#fff',
