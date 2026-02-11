@@ -209,16 +209,25 @@
             position: absolute;
             top: 15px;
             right: 15px;
-            background: rgba(102, 126, 234, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(102, 126, 234, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
             z-index: 100;
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .fullscreen-btn:active {
+            background: rgba(102, 126, 234, 1);
+            transform: scale(0.95);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
         .fullscreen-btn:hover {
             background: rgba(102, 126, 234, 1);
@@ -441,8 +450,9 @@
         Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
 
         // Fullscreen toggle function
-        async function toggleFullscreen(sectionId) {
+        function toggleFullscreen(sectionId) {
             const element = document.getElementById(sectionId);
+            console.log('Toggle fullscreen clicked:', sectionId);
 
             // Check if currently in fullscreen
             const isFullscreen = document.fullscreenElement ||
@@ -450,46 +460,48 @@
                                 document.mozFullScreenElement ||
                                 document.msFullscreenElement;
 
+            console.log('Is fullscreen:', isFullscreen);
+
             if (isFullscreen) {
                 // Exit fullscreen
+                console.log('Exiting fullscreen...');
                 if (document.exitFullscreen) {
-                    await document.exitFullscreen();
+                    document.exitFullscreen().catch(err => console.log('Exit error:', err));
                 } else if (document.webkitExitFullscreen) {
-                    await document.webkitExitFullscreen();
+                    document.webkitExitFullscreen().catch(err => console.log('Exit error:', err));
                 } else if (document.mozCancelFullScreen) {
-                    await document.mozCancelFullScreen();
+                    document.mozCancelFullScreen();
                 } else if (document.msExitFullscreen) {
-                    await document.msExitFullscreen();
-                }
-
-                // Reset orientation if possible
-                if (screen.orientation && screen.orientation.unlock) {
-                    try {
-                        await screen.orientation.unlock();
-                    } catch (e) {
-                        console.log('Orientation unlock not supported');
-                    }
+                    document.msExitFullscreen();
                 }
             } else {
                 // Enter fullscreen for this specific chart
-                if (element.requestFullscreen) {
-                    await element.requestFullscreen();
-                } else if (element.webkitRequestFullscreen) {
-                    await element.webkitRequestFullscreen();
+                console.log('Entering fullscreen...');
+
+                // iOS Safari - use webkit prefix
+                if (element.webkitRequestFullscreen) {
+                    element.webkitRequestFullscreen().catch(err => {
+                        console.log('Fullscreen error:', err);
+                        alert('Fullscreen not supported on this device. Try rotating your phone manually!');
+                    });
+                } else if (element.requestFullscreen) {
+                    element.requestFullscreen().catch(err => {
+                        console.log('Fullscreen error:', err);
+                        alert('Fullscreen not supported. Try rotating your phone manually!');
+                    });
                 } else if (element.mozRequestFullScreen) {
-                    await element.mozRequestFullScreen();
+                    element.mozRequestFullScreen();
                 } else if (element.msRequestFullscreen) {
-                    await element.msRequestFullscreen();
+                    element.msRequestFullscreen();
                 }
 
-                // Try to rotate to landscape
-                if (screen.orientation && screen.orientation.lock) {
-                    try {
-                        await screen.orientation.lock('landscape');
-                    } catch (e) {
-                        console.log('Orientation lock not supported or denied');
+                // Show hint to rotate manually if auto-rotate doesn't work
+                setTimeout(() => {
+                    const isInFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
+                    if (!isInFullscreen) {
+                        console.log('Auto-rotate not available, showing manual hint');
                     }
-                }
+                }, 500);
             }
         }
 
