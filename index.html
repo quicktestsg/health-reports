@@ -310,9 +310,17 @@
             color: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(10px);
             display: none;
+            text-align: center;
+            line-height: 1.4;
         }
         .chart-section.chart-fullscreen .exit-hint {
             display: block !important;
+        }
+        .rotate-hint {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: rgba(102, 126, 234, 1);
         }
     </style>
 </head>
@@ -418,14 +426,20 @@
                 </div>
             </div>
             <canvas id="todayHeartRateChart" height="120"></canvas>
-            <div class="exit-hint">Press Esc or tap button to exit</div>
+            <div class="exit-hint">
+                <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
+                Press Esc or tap button to exit
+            </div>
         </div>
 
         <div class="chart-section" id="hrTrendSection">
             <button class="fullscreen-btn" onclick="toggleFullscreen('hrTrendSection')">🔍 Fullscreen</button>
             <div class="chart-title">💓 Heart Rate Trend (7 days)</div>
             <canvas id="heartRateChart" height="120"></canvas>
-            <div class="exit-hint">Press Esc or tap button to exit</div>
+            <div class="exit-hint">
+                <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
+                Press Esc or tap button to exit
+            </div>
         </div>
 
         <div class="charts-grid">
@@ -433,25 +447,37 @@
                 <button class="fullscreen-btn" onclick="toggleFullscreen('sleepSection')">🔍 Fullscreen</button>
                 <div class="chart-title">😴 Sleep Score (7 days)</div>
                 <canvas id="sleepChart" height="150"></canvas>
-                <div class="exit-hint">Press Esc or tap button to exit</div>
+                <div class="exit-hint">
+                <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
+                Press Esc or tap button to exit
+            </div>
             </div>
             <div class="chart-section" id="hrvSection">
                 <button class="fullscreen-btn" onclick="toggleFullscreen('hrvSection')">🔍 Fullscreen</button>
                 <div class="chart-title">❤️ HRV Trend (7 days)</div>
                 <canvas id="hrvChart" height="150"></canvas>
-                <div class="exit-hint">Press Esc or tap button to exit</div>
+                <div class="exit-hint">
+                <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
+                Press Esc or tap button to exit
+            </div>
             </div>
             <div class="chart-section" id="stepsSection">
                 <button class="fullscreen-btn" onclick="toggleFullscreen('stepsSection')">🔍 Fullscreen</button>
                 <div class="chart-title">👟 Steps (7 days)</div>
                 <canvas id="stepsChart" height="150"></canvas>
-                <div class="exit-hint">Press Esc or tap button to exit</div>
+                <div class="exit-hint">
+                <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
+                Press Esc or tap button to exit
+            </div>
             </div>
             <div class="chart-section" id="intensitySection">
                 <button class="fullscreen-btn" onclick="toggleFullscreen('intensitySection')">🔍 Fullscreen</button>
                 <div class="chart-title">💪 Intensity Minutes (7 days)</div>
                 <canvas id="intensityChart" height="150"></canvas>
-                <div class="exit-hint">Press Esc or tap button to exit</div>
+                <div class="exit-hint">
+                <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
+                Press Esc or tap button to exit
+            </div>
             </div>
         </div>
     </div>
@@ -461,7 +487,7 @@
         Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
 
         // Fullscreen toggle function (CSS-based for iOS Safari compatibility)
-        function toggleFullscreen(sectionId) {
+        async function toggleFullscreen(sectionId) {
             const element = document.getElementById(sectionId);
             const isFullscreen = element.classList.contains('chart-fullscreen');
 
@@ -481,10 +507,31 @@
                 // Scroll to top
                 window.scrollTo(0, 0);
 
+                // Try to auto-rotate to landscape (works on Android)
+                if (screen.orientation && screen.orientation.lock) {
+                    try {
+                        await screen.orientation.lock('landscape');
+                        console.log('Auto-rotated to landscape');
+                    } catch (err) {
+                        console.log('Auto-rotate not supported:', err);
+                        // iOS Safari will fall here - show manual hint
+                    }
+                }
+
                 console.log('Entered fullscreen mode');
             } else {
                 // Exit fullscreen mode
                 document.body.classList.remove('has-fullscreen');
+
+                // Unlock orientation
+                if (screen.orientation && screen.orientation.unlock) {
+                    try {
+                        await screen.orientation.unlock();
+                        console.log('Orientation unlocked');
+                    } catch (err) {
+                        console.log('Orientation unlock not supported');
+                    }
+                }
 
                 // Reset all buttons
                 document.querySelectorAll('.fullscreen-btn').forEach(btn => {
