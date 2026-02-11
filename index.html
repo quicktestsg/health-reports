@@ -8,6 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <title>Jerry's Health Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
     <style>
         /* Build timestamp */
         .build-timestamp {
@@ -106,17 +107,6 @@
         canvas {
             touch-action: none;
         }
-        /* Prevent any chart movement */
-        canvas {
-            touch-action: none !important;
-            pointer-events: none !important;
-            user-select: none !important;
-        }
-        .chart-section canvas {
-            max-height: 250px !important;
-            width: 100% !important;
-        }
-
         .chart-section.chart-fullscreen canvas {
             touch-action: none !important;
             max-width: 100% !important;
@@ -535,18 +525,17 @@
 
     <script>
         Chart.defaults.color = 'rgba(255,255,255,0.7)';
-        Chart.defaults.animation = false;
-        Chart.defaults.animation.duration = 0;
-        Chart.defaults.hover.enabled = false;
-        Chart.defaults.plugins.tooltip.enabled = false;
-        Chart.defaults.interaction.mode = 'none';
-        Chart.defaults.responsive = true;
-        Chart.defaults.maintainAspectRatio = true;
-        Chart.defaults.events = [];  // No events
-        Chart.defaults.animation = false;
-        Chart.defaults.animation.duration = 0;
 
-        
+        // Prevent page zoom when touching charts
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvases = document.querySelectorAll('canvas');
+            canvases.forEach(canvas => {
+                canvas.addEventListener('touchstart', function(e) {
+                    if (e.touches.length === 2) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+
                 canvas.addEventListener('touchmove', function(e) {
                     if (e.touches.length === 2) {
                         e.preventDefault();
@@ -809,8 +798,6 @@
             },
             options: {
                 responsive: true,
-                animation: false,
-                animation: { duration: 0 },
                 maintainAspectRatio: false,
                 interaction: {
                     intersect: false,
@@ -902,7 +889,6 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
                 plugins: { legend: { display: false } },
                 scales: { y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
@@ -925,7 +911,6 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
                 plugins: { legend: { display: false } },
                 scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
@@ -946,7 +931,6 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
                 plugins: { legend: { display: false } },
                 scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
@@ -967,7 +951,6 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
                 plugins: { legend: { display: false } },
                 scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
