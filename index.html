@@ -9,6 +9,19 @@
     <title>Jerry's Health Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
+        /* Build timestamp */
+        .build-timestamp {
+            position: fixed;
+            bottom: 5px;
+            right: 5px;
+            font-size: 9px;
+            color: rgba(255,255,255,0.3);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .chart-fullscreen .build-timestamp {
+            display: none !important;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -811,6 +824,11 @@
                 scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
         });
+    </script>
+    <div class="build-timestamp" id="buildTimestamp"></div>
+    <script>
+        // Set build timestamp
+        document.getElementById('buildTimestamp').textContent = 'Updated: ' + new Date().toISOString().replace('T', ' ').slice(0, 19) + ' GMT+8';
     </script>
 </body>
 </html>
