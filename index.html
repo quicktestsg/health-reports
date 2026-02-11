@@ -359,8 +359,7 @@
         <div class="header">
             <h1>Health Dashboard</h1>
             <div class="date">Tuesday, February 10, 2026</div>
-        <div class="today-section">
-            <div class="section-title">📊 Today's Summary</div>
+        
 
             <!-- Readiness + Biological Age Row -->
             <div style="display: flex; justify-content: center; align-items: center; gap: 50px; margin-bottom: 25px; flex-wrap: wrap;">
@@ -605,7 +604,88 @@
             </div>
             <div class="chart-section" id="hrvSection">
                 <button class="fullscreen-btn" onclick="toggleFullscreen('hrvSection')">🔍 Fullscreen</button>
-                <div class="chart-title">❤️ HRV Trend (7 days)</div>
+                <div class="chart-ti
+        <div class="today-section">
+            <div class="section-title">TODAY'S HEALTH</div>
+            <div class="today-grid">
+                <!-- Biological Age (NEW TILE) -->
+                <div class="today-metric">
+                    <div class="today-label">🧮 Biological Age</div>
+                    <div class="today-value excellent">34.8</div>
+                    <div class="today-unit">-7.2 yrs</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">🔋 Body Battery</div>
+                    <div class="today-value">86</div>
+                    <div class="today-unit">score</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">💤 Sleep Score</div>
+                    <div class="today-value good">83</div>
+                    <div class="today-unit">/100</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">😴 Sleep Duration</div>
+                    <div class="today-value good">7.7</div>
+                    <div class="today-unit">hours</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">🛌 Deep Sleep</div>
+                    <div class="today-value warning">1.3</div>
+                    <div class="today-unit">hours</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">💭 REM Sleep</div>
+                    <div class="today-value good">1.5</div>
+                    <div class="today-unit">hours</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">❤️ HRV</div>
+                    <div class="today-value excellent">53</div>
+                    <div class="today-unit">ms</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">💓 Resting HR</div>
+                    <div class="today-value excellent">48</div>
+                    <div class="today-unit">bpm</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">📈 Avg HR</div>
+                    <div class="today-value good">54</div>
+                    <div class="today-unit">bpm</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">⬆️ Max HR</div>
+                    <div class="today-value warning">72</div>
+                    <div class="today-unit">bpm</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">⬇️ Min HR</div>
+                    <div class="today-value excellent">47</div>
+                    <div class="today-unit">bpm</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">👟 Steps</div>
+                    <div class="today-value good">11,289</div>
+                    <div class="today-unit">steps</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">📍 Distance</div>
+                    <div class="today-value">8.3</div>
+                    <div class="today-unit">km</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">🔥 Intensity</div>
+                    <div class="today-value warning">28</div>
+                    <div class="today-unit">minutes</div>
+                </div>
+                <div class="today-metric">
+                    <div class="today-label">🩸 SpO2</div>
+                    <div class="today-value excellent">96</div>
+                    <div class="today-unit">avg %</div>
+                </div>
+            </div>
+        </div>tle">❤️ HRV Trend (7 days)</div>
                 <canvas id="hrvChart" height="150"></canvas>
                 <div class="exit-hint">
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
