@@ -453,7 +453,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom data
+                Press Esc or tap button to exit • Double-tap to zoom time window
             </div>
         </div>
 
@@ -465,7 +465,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom data
+                Press Esc or tap button to exit • Double-tap to zoom time window
             </div>
         </div>
 
@@ -478,7 +478,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom data
+                Press Esc or tap button to exit • Double-tap to zoom time window
             </div>
             </div>
             <div class="chart-section" id="hrvSection">
@@ -489,7 +489,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom data
+                Press Esc or tap button to exit • Double-tap to zoom time window
             </div>
             </div>
             <div class="chart-section" id="stepsSection">
@@ -500,7 +500,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom data
+                Press Esc or tap button to exit • Double-tap to zoom time window
             </div>
             </div>
             <div class="chart-section" id="intensitySection">
@@ -511,7 +511,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom data
+                Press Esc or tap button to exit • Double-tap to zoom time window
             </div>
             </div>
         </div>
@@ -699,10 +699,14 @@
                             wheel: { enabled: false },
                             pinch: { enabled: true },
                             mode: 'x',
+                            onZoomComplete: function() {
+                                console.log('Zoomed to time window');
+                            }
                         },
                         pan: {
                             enabled: true,
                             mode: 'x',
+                            modifierKey: null
                         },
                         limits: {
                             x: { min: 'original', max: 'original' }
@@ -861,8 +865,8 @@
     </script>
     <div class="build-timestamp" id="buildTimestamp"></div>
     <script>
-        // BUILD_TIMESTAMP: 2026-02-11 08:30:00
-        document.getElementById('buildTimestamp').textContent = 'Deployed: 2026-02-11 08:30 SGT';
+        // BUILD_TIMESTAMP: 2026-02-11 08:33:00
+        document.getElementById('buildTimestamp').textContent = 'Deployed: 2026-02-11 08:33 SGT';
     </script>
 </body>
 </html>
