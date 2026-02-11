@@ -527,16 +527,7 @@
         Chart.defaults.animation = false;
         Chart.defaults.animation.duration = 0;
 
-        // Prevent page zoom when touching charts
-        document.addEventListener('DOMContentLoaded', function() {
-            const canvases = document.querySelectorAll('canvas');
-            canvases.forEach(canvas => {
-                canvas.addEventListener('touchstart', function(e) {
-                    if (e.touches.length === 2) {
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-
+        
                 canvas.addEventListener('touchmove', function(e) {
                     if (e.touches.length === 2) {
                         e.preventDefault();
