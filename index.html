@@ -8,7 +8,6 @@
     <meta http-equiv="Expires" content="0">
     <title>Jerry's Health Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
     <style>
         /* Build timestamp */
         .build-timestamp {
@@ -798,6 +797,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
                 maintainAspectRatio: false,
                 interaction: {
                     intersect: false,
@@ -863,6 +863,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
@@ -889,6 +890,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
                 plugins: { legend: { display: false } },
                 scales: { y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
@@ -911,6 +913,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
                 plugins: { legend: { display: false } },
                 scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
@@ -931,6 +934,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
                 plugins: { legend: { display: false } },
                 scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
@@ -951,6 +955,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
                 plugins: { legend: { display: false } },
                 scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
             }
