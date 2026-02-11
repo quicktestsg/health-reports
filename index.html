@@ -349,7 +349,26 @@
         }
     </style>
 </head>
-<body>
+/<body>/
+
+    <div id="debug-info" style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #0f0; padding: 10px; border-radius: 5px; font-size: 11px; z-index: 9999; font-family: monospace;">
+        <div style="color: #0f0; font-weight: bold; margin-bottom: 5px;">🐛 DEBUG INFO</div>
+        <div>Y-axis: <span style="color: #4ade80;">FIXED 40-130</span></div>
+        <div>Samples: <span id="debug-samples">?</span></div>
+        <div>Data Min: <span id="debug-min">?</span></div>
+        <div>Data Max: <span id="debug-max">?</span></div>
+    </div>
+    <script>
+        setTimeout(() => {
+            const hrValues = healthData.todayHRValues;
+            if (hrValues && hrValues.length > 0) {
+                document.getElementById('debug-samples').textContent = hrValues.length;
+                document.getElementById('debug-min').textContent = Math.min(...hrValues);
+                document.getElementById('debug-max').textContent = Math.max(...hrValues);
+            }
+        }, 1000);
+    </script>
+
     <div class="container">
         <div class="header">
             <h1>Health Dashboard</h1>
@@ -743,6 +762,35 @@
 
         // Detect landscape mode
         const isLandscape = window.innerWidth > window.innerHeight && window.innerWidth < 900;
+
+        
+        // ==================== DEBUG LOGGING ====================
+        console.log('=== CHART DEBUG ===');
+        console.log('Today HR data:', healthData.todayHRValues.length, 'samples');
+        if (healthData.todayHRValues.length > 0) {
+            console.log('Data min:', Math.min(...healthData.todayHRValues));
+            console.log('Data max:', Math.max(...healthData.todayHRValues));
+            console.log('Data avg:', Math.round(healthData.todayHRValues.reduce((a,b) => a+b, 0) / healthData.todayHRValues.length));
+        }
+        console.log('Y-axis config: min=40, max=130');
+        console.log('=====================================
+');
+
+        // Intercept Chart creation to log actual options
+        const originalChart = window.Chart;
+        window.Chart = function(ctx, config) {
+            console.log('=== CREATING CHART ===');
+            console.log('Chart type:', config.type);
+            if (config.options && config.options.scales && config.options.scales.y) {
+                console.log('Y-axis min:', config.options.scales.y.min);
+                console.log('Y-axis max:', config.options.scales.y.max);
+                console.log('Y-axis beginAtZero:', config.options.scales.y.beginAtZero);
+            }
+            console.log('========================
+');
+            return originalChart.call(this, ctx, config);
+        };
+
 
         const healthData = {
             readiness: 75,
