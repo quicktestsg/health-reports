@@ -8,6 +8,8 @@
     <meta http-equiv="Expires" content="0">
     <title>Jerry's Health Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
     <style>
         /* Build timestamp */
         .build-timestamp {
@@ -451,7 +453,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
+                Press Esc or tap button to exit • Double-tap chart to zoom data
             </div>
         </div>
 
@@ -463,7 +465,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
+                Press Esc or tap button to exit • Double-tap chart to zoom data
             </div>
         </div>
 
@@ -476,7 +478,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
+                Press Esc or tap button to exit • Double-tap chart to zoom data
             </div>
             </div>
             <div class="chart-section" id="hrvSection">
@@ -487,7 +489,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
+                Press Esc or tap button to exit • Double-tap chart to zoom data
             </div>
             </div>
             <div class="chart-section" id="stepsSection">
@@ -498,7 +500,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
+                Press Esc or tap button to exit • Double-tap chart to zoom data
             </div>
             </div>
             <div class="chart-section" id="intensitySection">
@@ -509,21 +511,39 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
+                Press Esc or tap button to exit • Double-tap chart to zoom data
             </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Register zoom plugin
+        Chart.register(ChartJSZoom);
+
         Chart.defaults.color = 'rgba(255,255,255,0.7)';
 
-        // Double-tap to zoom functionality
+        // Double-tap to zoom functionality using Chart.js zoom
         document.addEventListener('DOMContentLoaded', function() {
             const canvases = document.querySelectorAll('canvas');
             canvases.forEach(canvas => {
                 let lastTap = 0;
-                let zoomLevel = 1;
+                let isZoomed = false;
+                let chart = null;
+
+                // Get chart instance
+                setTimeout(() => {
+                    const parent = canvas.closest('.chart-section');
+                    if (parent) {
+                        const chartId = canvas.id;
+                        // Find the chart instance
+                        Chart.instances.forEach(instance => {
+                            if (instance.canvas.id === chartId) {
+                                chart = instance;
+                            }
+                        });
+                    }
+                }, 1000);
 
                 canvas.addEventListener('touchend', function(e) {
                     const currentTime = new Date().getTime();
@@ -533,16 +553,16 @@
                         // Double-tap detected
                         e.preventDefault();
 
-                        if (zoomLevel === 1) {
-                            // Zoom in
-                            canvas.style.transform = 'scale(1.5)';
-                            canvas.style.transformOrigin = 'center';
-                            zoomLevel = 1.5;
-                        } else {
-                            // Zoom out
-                            canvas.style.transform = 'scale(1)';
-                            canvas.style.transformOrigin = 'center';
-                            zoomLevel = 1;
+                        if (chart && chart.zoom) {
+                            if (!isZoomed) {
+                                // Zoom in to center
+                                chart.zoom(1.5);
+                                isZoomed = true;
+                            } else {
+                                // Reset zoom
+                                chart.resetZoom();
+                                isZoomed = false;
+                            }
                         }
                     }
                     lastTap = currentTime;
@@ -674,6 +694,20 @@
                 },
                 plugins: {
                     legend: { display: false },
+                    zoom: {
+                        zoom: {
+                            wheel: { enabled: false },
+                            pinch: { enabled: true },
+                            mode: 'x',
+                        },
+                        pan: {
+                            enabled: true,
+                            mode: 'x',
+                        },
+                        limits: {
+                            x: { min: 'original', max: 'original' }
+                        }
+                    },
                     tooltip: {
                         backgroundColor: 'rgba(0, 0, 0, 0.8)',
                         titleColor: '#fff',
