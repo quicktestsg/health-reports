@@ -517,7 +517,7 @@
         </div>
 
         <div class="chart-section">
-            <div class="chart-title">🏃 Recent Activities (7 days)</div>
+            <div class="chart-title">🏃 Today's Activities</div>
             <div id="activitiesList" style="max-height: 400px; overflow-y: auto; padding: 10px;">
                 <div style="text-align: center; color: rgba(255,255,255,0.5);">Loading activities...</div>
             </div>
@@ -563,13 +563,17 @@
             const container = document.getElementById('activitiesList');
             if (!container) return;
 
-            if (activities.length === 0) {
-                container.innerHTML = '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">No recent activities</div>';
+            // Filter to show only today's activities
+            const today = new Date().toISOString().split('T')[0];
+            const todaysActivities = activities.filter(a => a.date === today);
+
+            if (todaysActivities.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">No activities today yet</div>';
                 return;
             }
 
             let html = '';
-            activities.forEach((activity, index) => {
+            todaysActivities.forEach((activity, index) => {
                 const date = new Date(activity.date);
                 const dateStr = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
                 const duration = formatDuration(activity.duration_seconds);
@@ -970,8 +974,8 @@
     </script>
     <div class="build-timestamp" id="buildTimestamp"></div>
     <script>
-        // BUILD_TIMESTAMP: 2026-02-11 11:05:00
-        document.getElementById('buildTimestamp').textContent = 'Deployed: 2026-02-11 11:05 SGT';
+        // BUILD_TIMESTAMP: 2026-02-11 11:32:00
+        document.getElementById('buildTimestamp').textContent = 'Deployed: 2026-02-11 11:32 SGT';
     </script>
 </body>
 </html>
