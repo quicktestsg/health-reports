@@ -438,7 +438,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit
+                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
             </div>
         </div>
 
@@ -450,7 +450,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit
+                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
             </div>
         </div>
 
@@ -463,7 +463,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit
+                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
             </div>
             </div>
             <div class="chart-section" id="hrvSection">
@@ -474,7 +474,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit
+                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
             </div>
             </div>
             <div class="chart-section" id="stepsSection">
@@ -485,7 +485,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit
+                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
             </div>
             </div>
             <div class="chart-section" id="intensitySection">
@@ -496,7 +496,7 @@
                 <span class="rotate-hint">📱 Rotate phone to landscape for best view</span>
                 
                 
-                Press Esc or tap button to exit
+                Press Esc or tap button to exit • Double-tap chart to zoom 1.5x
             </div>
             </div>
         </div>
@@ -504,6 +504,38 @@
 
     <script>
         Chart.defaults.color = 'rgba(255,255,255,0.7)';
+
+        // Double-tap to zoom functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvases = document.querySelectorAll('canvas');
+            canvases.forEach(canvas => {
+                let lastTap = 0;
+                let zoomLevel = 1;
+
+                canvas.addEventListener('touchend', function(e) {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+
+                    if (tapLength < 300 && tapLength > 0) {
+                        // Double-tap detected
+                        e.preventDefault();
+
+                        if (zoomLevel === 1) {
+                            // Zoom in
+                            canvas.style.transform = 'scale(1.5)';
+                            canvas.style.transformOrigin = 'center';
+                            zoomLevel = 1.5;
+                        } else {
+                            // Zoom out
+                            canvas.style.transform = 'scale(1)';
+                            canvas.style.transformOrigin = 'center';
+                            zoomLevel = 1;
+                        }
+                    }
+                    lastTap = currentTime;
+                });
+            });
+        });
         Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
 
         // Fullscreen toggle function (CSS-based for iOS Safari compatibility)
