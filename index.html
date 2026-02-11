@@ -106,6 +106,17 @@
         canvas {
             touch-action: none;
         }
+        /* Prevent any chart movement */
+        canvas {
+            touch-action: none !important;
+            pointer-events: none !important;
+            user-select: none !important;
+        }
+        .chart-section canvas {
+            max-height: 250px !important;
+            width: 100% !important;
+        }
+
         .chart-section.chart-fullscreen canvas {
             touch-action: none !important;
             max-width: 100% !important;
@@ -526,17 +537,16 @@
         Chart.defaults.color = 'rgba(255,255,255,0.7)';
         Chart.defaults.animation = false;
         Chart.defaults.animation.duration = 0;
+        Chart.defaults.hover.enabled = false;
+        Chart.defaults.plugins.tooltip.enabled = false;
+        Chart.defaults.interaction.mode = 'none';
+        Chart.defaults.responsive = true;
+        Chart.defaults.maintainAspectRatio = true;
+        Chart.defaults.events = [];  // No events
+        Chart.defaults.animation = false;
+        Chart.defaults.animation.duration = 0;
 
-        // Prevent page zoom when touching charts
-        document.addEventListener('DOMContentLoaded', function() {
-            const canvases = document.querySelectorAll('canvas');
-            canvases.forEach(canvas => {
-                canvas.addEventListener('touchstart', function(e) {
-                    if (e.touches.length === 2) {
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-
+        
                 canvas.addEventListener('touchmove', function(e) {
                     if (e.touches.length === 2) {
                         e.preventDefault();
