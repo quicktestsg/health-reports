@@ -4,7 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jerry's Health Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+        // 28-day trend charts
+        const labels28Day = Array.from({length: 28}, (_, i) => {
+          const d = new Date();
+          d.setDate(d.getDate() - (27 - i));
+          return d.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+        });
+
+        const ctxHR28 = document.getElementById('heartRate28DayChart');
+        if (ctxHR28) {
+          new Chart(ctxHR28, {
+            type: 'line',
+            data: {
+              labels: labels28Day,
+              datasets: [{
+                label: 'Resting HR',
+                data: healthData.heartRate,
+                borderColor: '#f87171',
+                backgroundColor: 'rgba(248, 113, 113, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 2,
+                pointRadius: 4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: false, min: 40, max: 130, grid: { color: 'rgba(255,255,255,0.05)' },
+                x: { grid: { display: false } }
+              }
+            }
+          });
+        }
+
+        const ctxSleep28 = document.getElementById('sleepScore28DayChart');
+        if (ctxSleep28) {
+          new Chart(ctxSleep28, {
+            type: 'line',
+            data: {
+              labels: labels28Day,
+              datasets: [{
+                label: 'Sleep Score',
+                data: healthData.sleepScores,
+                borderColor: '#22d3ee',
+                backgroundColor: 'rgba(34, 211, 238, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 2,
+                pointRadius: 4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' },
+                x: { grid: { display: false } }
+              }
+            }
+          });
+        }
+
+        const ctxHRV28 = document.getElementById('hrv28DayChart');
+        if (ctxHRV28) {
+          new Chart(ctxHRV28, {
+            type: 'line',
+            data: {
+              labels: labels28Day,
+              datasets: [{
+                label: 'HRV (ms)',
+                data: healthData.hrvValues,
+                borderColor: '#4ade80',
+                backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 2,
+                pointRadius: 4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' },
+                x: { grid: { display: false } }
+              }
+            }
+          });
+        }
+
+        const ctxSteps28 = document.getElementById('steps28DayChart');
+        if (ctxSteps28) {
+          new Chart(ctxSteps28, {
+            type: 'bar',
+            data: {
+              labels: labels28Day,
+              datasets: [{
+                label: 'Steps',
+                data: healthData.stepsValues,
+                backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                borderColor: '#667eea',
+                borderWidth: 2,
+                borderRadius: 6
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: true, min: 0, max: 25000, grid: { color: 'rgba(255,255,255,0.05)' },
+                x: { grid: { display: false } }
+              }
+            }
+          });
+        }
+
+        const ctxIntensity28 = document.getElementById('intensity28DayChart');
+        if (ctxIntensity28) {
+          new Chart(ctxIntensity28, {
+            type: 'bar',
+            data: {
+              labels: labels28Day,
+              datasets: [{
+                label: 'Intensity Minutes',
+                data: healthData.intensityValues,
+                backgroundColor: 'rgba(251, 191, 36, 0.7)',
+                borderColor: '#fbbf24',
+                borderWidth: 2,
+                borderRadius: 6
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: true, min: 0, max: 120, grid: { color: 'rgba(255,255,255,0.05)' },
+                x: { grid: { display: false } }
+              }
+            }
+          });
+        }
+    
+</script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
@@ -270,6 +419,32 @@
 
         <div class="chart-section">
             <div class="chart-title">💓 Heart Rate Trend (7 days)</div>
+
+        <div class="chart-section">
+            <div class="chart-title">💓 Heart Rate Trend (28 days)</div>
+            <canvas id="heartRate28DayChart"></canvas>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-title">😴 Sleep Score Trend (28 days)</div>
+            <canvas id="sleepScore28DayChart"></canvas>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-title">❤️ HRV Trend (28 days)</div>
+            <canvas id="hrv28DayChart"></canvas>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-title">👟 Steps Trend (28 days)</div>
+            <canvas id="steps28DayChart"></canvas>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-title">🔥 Intensity Trend (28 days)</div>
+            <canvas id="intensity28DayChart"></canvas>
+        </div>
+  
             <canvas id="heartRateChart"></canvas>
         </div>
 
