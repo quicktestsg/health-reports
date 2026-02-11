@@ -111,6 +111,7 @@
         .chart-section.chart-fullscreen canvas {
             touch-action: none !important;
             max-width: 100% !important;
+            max-height: none !important;
         }
         .today-value { font-size: 28px; font-weight: 800; margin-bottom: 2px; }
         .today-value.excellent { color: #22d3ee; }
@@ -124,6 +125,12 @@
             padding: 30px;
             margin-bottom: 30px;
             border: 1px solid rgba(255,255,255,0.1);
+            min-height: 300px;
+            position: relative;
+        }
+        .chart-section canvas {
+            max-height: 200px !important;
+            width: 100% !important;
         }
         .chart-title {
             font-size: 16px;
@@ -974,8 +981,8 @@
     </script>
     <div class="build-timestamp" id="buildTimestamp"></div>
     <script>
-        // BUILD_TIMESTAMP: 2026-02-11 11:32:00
-        document.getElementById('buildTimestamp').textContent = 'Deployed: 2026-02-11 11:32 SGT';
+        // BUILD_TIMESTAMP: 2026-02-11 18:00:00
+        document.getElementById('buildTimestamp').textContent = 'Deployed: 2026-02-11 18:00 SGT';
     </script>
 </body>
 </html>
