@@ -110,7 +110,7 @@
         }
         .chart-section.chart-fullscreen canvas {
             touch-action: none !important;
-            max-width: 95vw !important;
+            max-width: 100% !important;
         }
         .today-value { font-size: 28px; font-weight: 800; margin-bottom: 2px; }
         .today-value.excellent { color: #22d3ee; }
@@ -519,6 +519,24 @@
 
     <script>
         Chart.defaults.color = 'rgba(255,255,255,0.7)';
+
+        // Prevent page zoom when touching charts
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvases = document.querySelectorAll('canvas');
+            canvases.forEach(canvas => {
+                canvas.addEventListener('touchstart', function(e) {
+                    if (e.touches.length === 2) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+
+                canvas.addEventListener('touchmove', function(e) {
+                    if (e.touches.length === 2) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            });
+        });
         Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
 
         // Fullscreen toggle function (CSS-based for iOS Safari compatibility)
@@ -812,8 +830,8 @@
     </script>
     <div class="build-timestamp" id="buildTimestamp"></div>
     <script>
-        // BUILD_TIMESTAMP: 2026-02-11 08:37:00
-        document.getElementById('buildTimestamp').textContent = 'Deployed: 2026-02-11 08:37 SGT';
+        // BUILD_TIMESTAMP: 2026-02-11 08:44:00
+        document.getElementById('buildTimestamp').textContent = 'Deployed: 2026-02-11 08:44 SGT';
     </script>
 </body>
 </html>
